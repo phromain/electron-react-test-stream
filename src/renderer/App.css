@@ -1,7 +1,3 @@
-/*
- * @NOTE: Prepend a `~` to css file paths that are in your node_modules
- *        See https://github.com/webpack-contrib/sass-loader#imports
- */
 body {
   position: relative;
   color: white;
@@ -16,7 +12,8 @@ body {
   overflow-y: hidden;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; 
+  padding: 20px;
 }
 
 button {
@@ -38,15 +35,19 @@ button:hover {
   opacity: 1;
 }
 
-li {
+ul {
   list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 15px;
 }
 
 a {
   text-decoration: none;
-  height: fit-content;
-  width: fit-content;
-  margin: 10px;
+  color: white;
+  font-size: 1.1rem;
 }
 
 a:hover {
@@ -54,9 +55,75 @@ a:hover {
   text-decoration: none;
 }
 
-.Hello {
+input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border: 1px solid #fff;
+}
+
+.MovieSearch {
+  width: 100%;
+  max-width: 600px;
+  background: rgba(0, 0, 0, 0.6); 
+  border-radius: 10px;
+  padding: 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin: 20px 0;
+}
+
+.MovieList, .MovieDetail {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(0, 0, 0, 0.6); 
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: auto; 
+  max-height: 80vh; 
+}
+
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size: 1.4rem;
+  color: white;
+  margin-bottom: 10px;
+}
+
+p {
+  color: white;
+  font-size: 1.1rem;
+  margin: 5px 0;
+}
+
+button.return-btn {
+  background-color: #384138;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+}
+
+button.return-btn:hover {
+  transform: scale(1.05);
+  opacity: 1;
 }

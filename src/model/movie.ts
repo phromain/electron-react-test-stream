@@ -8,9 +8,5 @@ export class Movie {
     ) {}
 }
 
-export class Provider {
-    constructor(
-        public providerId: number,
-        public providerName: string
-    ) {}
-}
+
+

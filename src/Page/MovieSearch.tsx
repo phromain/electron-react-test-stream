@@ -9,21 +9,24 @@ export const MovieSearch: React.FC = () => {
     const [query, setQuery] = useState('');
     const [movies, setMovies] = useState<Movie[]>([]);
     const [error, setError] = useState<string | null>(null); 
+    const [noResults, setNoResults] = useState(false); 
     const navigate = useNavigate();
 
     const handleSearch = async () => {
         if (query.trim() === '') return;
 
         try {
-            setError(null); 
+            setError(null);
+            setNoResults(false);
             const results = await movieService.searchMovies(query);
             setMovies(results);
 
-            if (results.length > 0) {
+            if (results.length === 0) {
+                setNoResults(true); 
+            } else {
                 navigate('/movies', { state: { movies: results } });
             }
         } catch (error) {
-            console.error('Erreur lors de la recherche des films:', error);
             setError('Service indisponible, veuillez réessayer plus tard.');
         }
     };
@@ -40,8 +43,9 @@ export const MovieSearch: React.FC = () => {
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             />
             <button onClick={handleSearch}>Rechercher</button>
-
-            {error && <p className="error-message">{error}</p>} 
+            <br />
+            {error && <p className="error-message">{error}</p>}
+            {noResults && <p className="no-results-message">Aucun film trouvé pour cette recherche.</p>} 
         </div>
     );
 };

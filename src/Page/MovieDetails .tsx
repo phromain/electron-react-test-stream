@@ -26,7 +26,7 @@ export const MovieDetail: React.FC = () => {
 
     const getProviderNames = () => {
     const providerNames = providers.map(provider => provider.providerName);
-    const requiredProviders = ['Netflix', 'Prime Video', 'Disney+'];
+    const requiredProviders = ['Netflix', 'Amazon Video', 'Disney Plus'];
 
     return requiredProviders.map(provider => {
         return providerNames.includes(provider) 

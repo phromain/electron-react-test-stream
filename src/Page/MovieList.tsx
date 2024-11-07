@@ -8,40 +8,43 @@ export const MovieList: React.FC = () => {
     const navigate = useNavigate();
 
     const sortedMovies = [...movies].sort((a, b) => {
-    const dateA = new Date(a.releaseDate);
-    const dateB = new Date(b.releaseDate);
-    return dateB.getTime() - dateA.getTime(); 
+        const dateA = new Date(a.releaseDate);
+        const dateB = new Date(b.releaseDate);
+        return dateB.getTime() - dateA.getTime(); 
     });
 
     const goBack = () => {
-    navigate(-1);  
+        navigate(-1);  
     };
 
     return (
-    <div className="MovieList">
-        <button className="return-btn" onClick={goBack}>
-        Retour à la recherche
-        </button>
+        <div className="MovieList">
+            <button className="return-btn" onClick={goBack}>
+                Retour à la recherche
+            </button>
 
-        {sortedMovies.length > 0 ? (
-        <>
-            <h2>Résultats :</h2>
-            <ul>
-            {sortedMovies.map((movie: Movie) => (
-                <li key={movie.id}>
-                <Link to={`/movies/${movie.id}`}>
-                    <h3>
-                    {movie.title} 
-                    {movie.releaseDate && ` (${new Date(movie.releaseDate).getFullYear()})`}
-                    </h3>
-                </Link>
-                </li>
-            ))}
-            </ul>
-        </>
-        ) : (
-        <p>Aucun film ne correspond à votre recherche.</p>
-        )}
-    </div>
+            {sortedMovies.length > 0 ? (
+                <>
+                    <h2>Résultats :</h2>
+                    <div className="scrollable-container">
+                        <div className="movie-grid">
+                            {sortedMovies.map((movie: Movie) => (
+                                <div key={movie.id} className="movie-item">
+                                    <Link to={`/movies/${movie.id}`}>
+                                        {movie.posterPath ? (
+                                            <img src={movie.posterPath} alt={movie.title} className="movie-poster" />
+                                        ) : (
+                                            <div className="movie-placeholder">Image non disponible</div>
+                                        )}
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </>
+            ) : (
+                <p>Aucun film ne correspond à votre recherche.</p>
+            )}
+        </div>
     );
 };

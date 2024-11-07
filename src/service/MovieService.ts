@@ -1,11 +1,6 @@
-import { Movie, Provider } from '../model/models';
-import { ENDPOINTS, API_KEY} from '../const/api';
-
-/* const API_KEY = process.env.REACT_APP_API_KEY;
-
-if (!API_KEY) {
-    throw new Error("API_KEY ou BASE_URL non définis dans .env");
-} */
+import { Movie } from '../model/movie';
+import { Provider } from '../model/provider';
+import { ENDPOINTS, API_KEY, BASE_URL_IMG } from '../const/api';
 
 export class MovieService {
     async searchMovies(query: string): Promise<Movie[]> {
@@ -17,7 +12,7 @@ export class MovieService {
             new Movie(
                 item.id,
                 item.title,
-                item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : null,
+                item.poster_path ? `${BASE_URL_IMG}${item.poster_path}` : null,
                 item.overview || 'Pas de résumé disponible',
                 item.release_date || 'Date non spécifiée'
             )
@@ -32,7 +27,7 @@ export class MovieService {
         return new Movie(
             data.id,
             data.title,
-            data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : null,
+            data.poster_path ? `${BASE_URL_IMG}${data.poster_path}` : null,
             data.overview || 'Pas de résumé disponible',
             data.release_date || 'Date non spécifiée'
         );
@@ -44,8 +39,13 @@ export class MovieService {
         const data = await response.json();
 
         const providers = data.results?.FR?.flatrate || [];
+        console.log('Fournisseurs pour FR :', providers);
         return providers.map((provider: any) =>
-            new Provider(provider.provider_id, provider.provider_name)
+            new Provider(
+                provider.provider_id,        
+                provider.provider_name,      
+                provider.logo_path ? `${BASE_URL_IMG}${provider.logo_path}` : '' 
+            )
         );
     }
 }

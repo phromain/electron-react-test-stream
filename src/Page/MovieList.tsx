@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Movie } from '../model/models';
+import { Movie } from '../model/movie';
 
 export const MovieList: React.FC = () => {
     const { state } = useLocation();

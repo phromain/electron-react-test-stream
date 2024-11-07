@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MovieService } from '../service/MovieService';
 import { useNavigate } from 'react-router-dom';
-import { Movie } from '../model/models';
+import { Movie } from '../model/movie';
 
 const movieService = new MovieService();
 
@@ -23,7 +23,7 @@ export const MovieSearch: React.FC = () => {
 
     return (
     <div className="MovieSearch">
-        <h2>Netflix, Disney + ou Prime Video ?</h2>
+        <h2>Netflix, Disney + ou Amazon Video ?</h2>
 
         <input
         type="text"

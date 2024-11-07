@@ -23,7 +23,7 @@ export const MovieSearch: React.FC = () => {
 
     return (
     <div className="MovieSearch">
-        <h2>Netflix, Disney + ou Amazon Video ?</h2>
+        <h2>Votre film est à portée de main sur ces plateformes</h2>
 
         <input
         type="text"

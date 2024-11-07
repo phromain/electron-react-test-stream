@@ -41,24 +41,28 @@ export const MovieDetail: React.FC = () => {
             {movie ? (
                 <>
                     <h2>{movie.title}</h2>
-                    {movie.posterPath && <img src={movie.posterPath} alt={movie.title} width="200" />}
-                    <p>{movie.overview}</p>
 
-                    <p>Date de sortie : {movie.releaseDate ? formatReleaseDate(movie.releaseDate) : 'Non spécifiée'}</p>
-
-                    <h3>Fournisseurs de streaming :</h3>
-                    <ul>
-                        {providers.map((provider, index) => (
-                            <li key={index}>
+                    <div className="movie-providers">
+                        {providers.length === 0 ? (
+                            <p>Indisponible pour le moment</p>
+                        ) : (
+                            providers.map((provider, index) => (
                                 <img
+                                    key={index}
                                     src={provider.posterPath}
                                     alt={provider.providerName}
                                     width="50"
                                     height="50"
+                                    className="provider-logo"
                                 />
-                            </li>
-                        ))}
-                    </ul>
+                            ))
+                        )}
+                    </div>
+
+                    {movie.posterPath && <img src={movie.posterPath} alt={movie.title} width="200" />}
+                    <p>{movie.overview}</p>
+
+                    <p>Date de sortie : {movie.releaseDate ? formatReleaseDate(movie.releaseDate) : 'Non spécifiée'}</p>
                 </>
             ) : (
                 <p>Chargement des détails du film...</p>

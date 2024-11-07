@@ -10,16 +10,23 @@ export const MovieDetail: React.FC = () => {
     const { movieId } = useParams<{ movieId: string }>();
     const [movie, setMovie] = useState<Movie | null>(null);
     const [providers, setProviders] = useState<Provider[]>([]);
+    const [error, setError] = useState<string | null>(null); // Ajout de l'état pour l'erreur
     const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchMovieDetails = async () => {
             if (movieId) {
-                const movieData = await movieService.getMovieDetails(parseInt(movieId));
-                const providerData = await movieService.getProviders(parseInt(movieId));
+                try {
+                    setError(null); // Réinitialiser l'erreur avant de faire la requête
+                    const movieData = await movieService.getMovieDetails(parseInt(movieId));
+                    const providerData = await movieService.getProviders(parseInt(movieId));
 
-                setMovie(movieData);
-                setProviders(providerData);
+                    setMovie(movieData);
+                    setProviders(providerData);
+                } catch (error) {
+                    console.error('Erreur lors de la récupération des détails du film:', error);
+                    setError('Service indisponible, veuillez réessayer plus tard.');
+                }
             }
         };
         fetchMovieDetails();
@@ -38,7 +45,9 @@ export const MovieDetail: React.FC = () => {
         <div className="MovieDetail">
             <button className="return-btn" onClick={handleBackClick}>Retour</button> 
 
-            {movie ? (
+            {error ? (
+                <p className="error-message">{error}</p> 
+            ) : movie ? (
                 <>
                     <h2>{movie.title}</h2>
 

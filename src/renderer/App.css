@@ -150,3 +150,9 @@ button.return-btn:hover {
   transform: scale(1.05);
   opacity: 1;
 }
+
+.error-message {
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  text-align: center;
+}

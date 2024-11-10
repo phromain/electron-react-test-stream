@@ -1,24 +1,61 @@
 import { Movie } from '../model/movie';
 import { Provider } from '../model/provider';
-import { ENDPOINTS, API_KEY, BASE_URL_IMG } from '../const/api';
+import { ENDPOINTS, API_KEY, BASE_URL_IMG, ERROR_MESSAGES } from '../const/api';
 
 export class MovieService {
+    private static instance: MovieService;
+    private selectedMovieId: number | null = null;
+
+    private constructor() {}
+
+    public static getInstance(): MovieService {
+        if (!MovieService.instance) {
+            MovieService.instance = new MovieService();
+        }
+        return MovieService.instance;
+    }
+
+    public setSelectedMovieId(movieId: number): void {
+        this.selectedMovieId = movieId;
+    }
+
+    public getSelectedMovieId(): number | null {
+        return this.selectedMovieId;
+    }
+
     async searchMovies(query: string): Promise<Movie[]> {
         const url = `${ENDPOINTS.movie.search}?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=fr`;
-        
+        return this.fetchMovies(url);
+    }
+
+    async getMovieDetails(movieId: number): Promise<Movie> {
+        const url = this.buildMovieDetailsUrl(movieId);
+        return this.fetchMovieDetails(url);
+    }
+
+    async getProviders(movieId: number): Promise<Provider[]> {
+        const url = this.buildProvidersUrl(movieId);
+        return this.fetchProviders(url);
+    }
+
+    private buildMovieDetailsUrl(movieId: number): string {
+        return `${ENDPOINTS.movie.details(movieId)}?api_key=${API_KEY}&language=fr`;
+    }
+
+    private buildProvidersUrl(movieId: number): string {
+        return `${ENDPOINTS.movie.providers(movieId)}?api_key=${API_KEY}&language=fr`;
+    }
+
+    private async fetchMovies(url: string): Promise<Movie[]> {
         try {
             const response = await fetch(url);
-
             if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status}`);
+                throw new Error(ERROR_MESSAGES.httpError(response.status));
             }
-
             const data = await response.json();
-
             if (!data.results) {
-                throw new Error('Aucun résultat trouvé');
+                throw new Error(ERROR_MESSAGES.noResults);
             }
-
             return data.results.map((item: any) => 
                 new Movie(
                     item.id,
@@ -29,27 +66,20 @@ export class MovieService {
                 )
             );
         } catch (error) {
-            //console.error('Erreur lors de la recherche des films:', error);
             throw error; 
         }
     }
 
-    async getMovieDetails(movieId: number): Promise<Movie> {
-        const url = `${ENDPOINTS.movie.details(movieId)}?api_key=${API_KEY}&language=fr`;
-
+    private async fetchMovieDetails(url: string): Promise<Movie> {
         try {
             const response = await fetch(url);
-
             if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status}`);
+                throw new Error(ERROR_MESSAGES.httpError(response.status));
             }
-
             const data = await response.json();
-
             if (!data) {
-                throw new Error('Détails du film non trouvés');
+                throw new Error(ERROR_MESSAGES.noDetails);
             }
-
             return new Movie(
                 data.id,
                 data.title,
@@ -58,32 +88,21 @@ export class MovieService {
                 data.release_date || 'Date non spécifiée'
             );
         } catch (error) {
-            //console.error('Erreur lors de la récupération des détails du film:', error);
             throw error; 
         }
     }
 
-    async getProviders(movieId: number): Promise<Provider[]> {
-        const url = `${ENDPOINTS.movie.providers(movieId)}?api_key=${API_KEY}&language=fr`;
-
+    private async fetchProviders(url: string): Promise<Provider[]> {
         try {
             const response = await fetch(url);
-
-
             if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status}`);
+                throw new Error(ERROR_MESSAGES.httpError(response.status));
             }
-
             const data = await response.json();
-
             const providers = data.results?.FR?.flatrate || [];
-
             if (providers.length === 0) {
-                console.warn('Aucun fournisseur trouvé pour ce film.');
+                console.warn(ERROR_MESSAGES.noProviders);
             }
-
-            //console.log('Fournisseurs pour FR :', providers);
-
             return providers.map((provider: any) =>
                 new Provider(
                     provider.provider_id,        
@@ -92,7 +111,6 @@ export class MovieService {
                 )
             );
         } catch (error) {
-            //console.error('Erreur lors de la récupération des fournisseurs:', error);
             throw error; 
         }
     }

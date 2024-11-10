@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { MovieService } from '../service/MovieService';
 import { useNavigate } from 'react-router-dom';
+import { MovieService } from '../service/MovieService';
 import { Movie } from '../model/movie';
 
-const movieService = new MovieService();
+const movieService = MovieService.getInstance();
 
 export const MovieSearch: React.FC = () => {
     const [query, setQuery] = useState('');

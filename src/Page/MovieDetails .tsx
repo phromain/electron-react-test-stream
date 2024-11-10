@@ -5,7 +5,7 @@ import { Movie } from '../model/movie';
 import { Provider } from '../model/provider';
 import { providerUrl, providerNameMapping } from '../const/providerUrl';
 
-const movieService = new MovieService();
+const movieService = MovieService.getInstance();
 
 export const MovieDetail: React.FC = () => {
     const { movieId } = useParams<{ movieId: string }>();
@@ -25,7 +25,6 @@ export const MovieDetail: React.FC = () => {
                     setMovie(movieData);
                     setProviders(providerData);
                 } catch (error) {
-                    console.error('Erreur lors de la récupération des détails du film:', error);
                     setError('Service indisponible, veuillez réessayer plus tard.');
                 }
             }

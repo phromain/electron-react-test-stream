@@ -14,9 +14,12 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
+import dotenv from 'dotenv';
 
 checkNodeEnv('production');
 deleteSourceMaps();
+
+dotenv.config();
 
 const configuration: webpack.Configuration = {
   devtool: 'source-map',
@@ -108,7 +111,7 @@ const configuration: webpack.Configuration = {
      */
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
-      DEBUG_PROD: false,
+      DEBUG_PROD: 'false',
     }),
 
     new MiniCssExtractPlugin({
@@ -134,6 +137,7 @@ const configuration: webpack.Configuration = {
 
     new webpack.DefinePlugin({
       'process.type': '"renderer"',
+      'process.env.REACT_APP_API_KEY': JSON.stringify(process.env.REACT_APP_API_KEY),
     }),
   ],
 };

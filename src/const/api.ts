@@ -1,6 +1,6 @@
 
 export const BASE_URL = 'https://api.themoviedb.org/3';
-export const API_KEY = '2b1acfbaf173e0e51b7a5e4a02d8403b';
+export const API_KEY = process.env.REACT_APP_API_KEY;
 export const BASE_URL_IMG = 'https://image.tmdb.org/t/p/w500';
 
 export const ENDPOINTS = {
